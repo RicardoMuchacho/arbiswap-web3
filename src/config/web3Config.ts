@@ -1,8 +1,8 @@
 
 import { configureChains, createConfig } from "wagmi";
 import { sepolia } from "wagmi/chains";
-import { EthereumClient, w3mConnectors, w3mProvider } from "@web3modal/ethereum";
 import { Web3Modal } from "@web3modal/react";
+import { EthereumClient, w3mConnectors, w3mProvider } from "@web3modal/ethereum";
 
 // You would normally use your own project ID from WalletConnect Cloud
 const projectId = "YOUR_WALLETCONNECT_PROJECT_ID";
@@ -25,4 +25,7 @@ export const ethereumClient = new EthereumClient(wagmiConfig, chains);
 export const web3ModalConfig = {
   projectId,
   ethereumClient,
+  // Remove themeColor as it's not supported in the current version
+  themeMode: "dark" as const,
 };
+

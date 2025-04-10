@@ -40,8 +40,7 @@ const Index = () => {
       <Web3Modal
         projectId={web3ModalConfig.projectId}
         ethereumClient={web3ModalConfig.ethereumClient}
-        themeMode="dark"
-        themeColor="purple"
+        themeMode={web3ModalConfig.themeMode}
       />
     </WagmiConfig>
   );
