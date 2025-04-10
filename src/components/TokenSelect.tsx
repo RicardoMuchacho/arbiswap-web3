@@ -31,7 +31,7 @@ const TokenSelect: React.FC<TokenSelectProps> = ({
   };
   return <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <button type="button" className="flex items-center gap-2 py-2 px-3 rounded-lg transition-colors text-sm font-medium border border-dex-border/50 bg-slate-500 hover:bg-slate-400">
+        <button type="button" className="flex items-center gap-2 py-2 px-3 rounded-lg transition-colors text-sm font-medium border border-dex-border/50 bg-slate-300 hover:bg-slate-200">
           {selectedToken ? <>
               <img src={selectedToken.logoURI} alt={selectedToken.symbol} className="w-5 h-5 rounded-full" />
               {selectedToken.symbol}
