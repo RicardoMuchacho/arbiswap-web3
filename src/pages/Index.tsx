@@ -1,8 +1,5 @@
 
 import React from 'react';
-import { Web3Modal } from '@web3modal/react';
-import { WagmiConfig } from 'wagmi';
-import { wagmiConfig, web3ModalConfig } from '@/config/web3Config';
 import Navbar from '@/components/Navbar';
 import SwapForm from '@/components/SwapForm';
 import PoolsInfo from '@/components/PoolsInfo';
@@ -10,47 +7,38 @@ import TransactionHistory from '@/components/TransactionHistory';
 import Footer from '@/components/Footer';
 
 const Index = () => {
-  return (
-    <WagmiConfig config={wagmiConfig}>
-      <div className="min-h-screen bg-gradient-to-br from-dex-background via-dex-secondary/10 to-dex-background/90 backdrop-blur-3xl">
-        <div className="absolute inset-0 bg-[url('/background-pattern.svg')] bg-repeat opacity-5 mix-blend-soft-light pointer-events-none" />
-        <div className="absolute top-40 left-20 w-72 h-72 bg-dex-primary/20 rounded-full filter blur-3xl opacity-20 animate-pulse-glow" />
-        <div className="absolute top-60 right-20 w-96 h-96 bg-dex-accent/20 rounded-full filter blur-3xl opacity-10 animate-pulse-glow" />
-        
-        <div className="container max-w-7xl mx-auto px-4 relative z-10">
-          <Navbar />
-          
-          <div className="py-10 flex flex-col items-center justify-center">
-            <h1 className="text-4xl font-bold text-gradient mb-2">
-              SepoliSwap
-            </h1>
-            <p className="text-dex-foreground/70 mb-10 text-center max-w-md">
-              A decentralized exchange for swapping tokens on the Ethereum Sepolia testnet
-            </p>
-            
-            <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 w-full mb-10">
-              <div className="lg:col-span-2">
-                <SwapForm />
-              </div>
-              
-              <div className="lg:col-span-3 space-y-6">
-                <PoolsInfo />
-                <TransactionHistory />
-              </div>
+    return (
+        <div className="min-h-screen bg-gradient-to-br from-dex-background via-dex-secondary/10 to-dex-background/90 backdrop-blur-3xl">
+            <div className="absolute inset-0 bg-[url('/background-pattern.svg')] bg-repeat opacity-5 mix-blend-soft-light pointer-events-none" />
+            <div className="absolute top-40 left-20 w-72 h-72 bg-dex-primary/20 rounded-full filter blur-3xl opacity-20 animate-pulse-glow" />
+            <div className="absolute top-60 right-20 w-96 h-96 bg-dex-accent/20 rounded-full filter blur-3xl opacity-10 animate-pulse-glow" />
+
+            <div className="container max-w-7xl mx-auto px-4 relative z-10">
+                <Navbar />
+
+                <div className="py-10 flex flex-col items-center justify-center">
+                    <h1 className="text-4xl font-bold text-gradient mb-2">
+                        SepoliSwap
+                    </h1>
+                    <p className="text-dex-foreground/70 mb-10 text-center max-w-md">
+                        A decentralized exchange for swapping tokens on the Ethereum Sepolia testnet
+                    </p>
+
+                    <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 w-full mb-10">
+                        <div className="lg:col-span-2">
+                            <SwapForm />
+                        </div>
+
+                        <div className="lg:col-span-3 space-y-6">
+                            <PoolsInfo />
+                            <TransactionHistory />
+                        </div>
+                    </div>
+                </div>
             </div>
-          </div>
+            <Footer />
         </div>
-        
-        <Footer />
-      </div>
-      
-      <Web3Modal
-        projectId={web3ModalConfig.projectId}
-        ethereumClient={web3ModalConfig.ethereumClient}
-        themeMode={web3ModalConfig.themeMode}
-      />
-    </WagmiConfig>
-  );
+    );
 };
 
 export default Index;
