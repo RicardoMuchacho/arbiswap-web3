@@ -115,7 +115,7 @@ const SwapForm = () => {
     };
   };
   const buttonState = getButtonState();
-  return <Card className="w-full max-w-md mx-auto glass-card rounded-xl overflow-hidden p-5 bg-slate-950">
+  return <Card className="w-full max-w-md mx-auto glass-card rounded-xl overflow-hidden p-5 bg-slate-950 text-white">
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-lg font-medium">Swap</h2>
         <Button variant="ghost" size="icon" className="text-dex-foreground/70 hover:text-dex-foreground rounded-full">
