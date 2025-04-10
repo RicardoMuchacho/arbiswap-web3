@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -52,15 +53,16 @@ export default {
 					DEFAULT: 'hsl(var(--card))',
 					foreground: 'hsl(var(--card-foreground))'
 				},
-				sidebar: {
-					DEFAULT: 'hsl(var(--sidebar-background))',
-					foreground: 'hsl(var(--sidebar-foreground))',
-					primary: 'hsl(var(--sidebar-primary))',
-					'primary-foreground': 'hsl(var(--sidebar-primary-foreground))',
-					accent: 'hsl(var(--sidebar-accent))',
-					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
-					border: 'hsl(var(--sidebar-border))',
-					ring: 'hsl(var(--sidebar-ring))'
+				dex: {
+					primary: '#8247E5',
+					secondary: '#2D0B5A',
+					accent: '#D4B3FF',
+					background: '#13111C',
+					foreground: '#F7F7F7',
+					border: '#3F3951',
+					success: '#1FCE71',
+					warning: '#FFAA2C',
+					error: '#FF5252'
 				}
 			},
 			borderRadius: {
@@ -84,11 +86,22 @@ export default {
 					to: {
 						height: '0'
 					}
+				},
+				'pulse-glow': {
+					'0%, 100%': { 
+						opacity: '1',
+						boxShadow: '0 0 10px rgba(130, 71, 229, 0.7), 0 0 20px rgba(130, 71, 229, 0.5)'
+					},
+					'50%': { 
+						opacity: '0.7',
+						boxShadow: '0 0 15px rgba(130, 71, 229, 0.9), 0 0 30px rgba(130, 71, 229, 0.7)'
+					}
 				}
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
-				'accordion-up': 'accordion-up 0.2s ease-out'
+				'accordion-up': 'accordion-up 0.2s ease-out',
+				'pulse-glow': 'pulse-glow 2s infinite'
 			}
 		}
 	},

@@ -1,0 +1,257 @@
+
+import React, { useState, useEffect } from 'react';
+import { useAccount } from 'wagmi';
+import { ArrowDown, Settings, Info } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import TokenSelect from './TokenSelect';
+import { TOKENS, Token } from '@/constants/tokens';
+import { formatAmount } from '@/utils/formatters';
+import { useToast } from '@/components/ui/use-toast';
+
+const SwapForm = () => {
+  const { address, isConnected } = useAccount();
+  const { toast } = useToast();
+  
+  const [tokenFrom, setTokenFrom] = useState<Token>(TOKENS.ETH);
+  const [tokenTo, setTokenTo] = useState<Token>(TOKENS.USDC);
+  const [amountFrom, setAmountFrom] = useState('');
+  const [amountTo, setAmountTo] = useState('');
+  const [slippage, setSlippage] = useState(0.5); // 0.5% default slippage
+  const [priceImpact, setPriceImpact] = useState<number | null>(null);
+  const [exchangeRate, setExchangeRate] = useState<number | null>(null);
+  
+  // Mock function to simulate getting a quote from the DEX
+  const getSwapQuote = (fromToken: Token, toToken: Token, amount: string) => {
+    if (!amount || parseFloat(amount) === 0) {
+      return { toAmount: '0', priceImpact: 0, rate: 0 };
+    }
+    
+    // In a real implementation, this would call a smart contract or API
+    let rate = 0;
+    
+    if (fromToken.symbol === 'ETH' && toToken.symbol === 'USDC') {
+      rate = 3400; // 1 ETH = 3400 USDC
+    } else if (fromToken.symbol === 'USDC' && toToken.symbol === 'ETH') {
+      rate = 1 / 3400; // 1 USDC = 0.000294 ETH
+    } else if (fromToken.symbol === 'ETH' && toToken.symbol === 'DAI') {
+      rate = 3390; // 1 ETH = 3390 DAI
+    } else if (fromToken.symbol === 'DAI' && toToken.symbol === 'ETH') {
+      rate = 1 / 3390; // 1 DAI = 0.000295 ETH
+    } else if (fromToken.symbol === 'ETH' && toToken.symbol === 'WETH') {
+      rate = 0.998; // 1 ETH = 0.998 WETH (small fee)
+    } else if (fromToken.symbol === 'WETH' && toToken.symbol === 'ETH') {
+      rate = 1.002; // 1 WETH = 1.002 ETH
+    } else if (fromToken.symbol === 'USDC' && toToken.symbol === 'DAI') {
+      rate = 0.995; // 1 USDC = 0.995 DAI
+    } else if (fromToken.symbol === 'DAI' && toToken.symbol === 'USDC') {
+      rate = 1.005; // 1 DAI = 1.005 USDC
+    }
+    
+    const parsedAmount = parseFloat(amount);
+    const toAmount = (parsedAmount * rate).toString();
+    
+    // Calculate a mock price impact based on the amount
+    // In a real DEX, this would come from the actual liquidity pool calculations
+    const mockPriceImpact = parsedAmount > 10 ? 
+      Math.min(parsedAmount * 0.005, 5) : // 0.5% per unit, max 5%
+      0.1; // Minimum price impact
+      
+    return {
+      toAmount,
+      priceImpact: mockPriceImpact,
+      rate
+    };
+  };
+  
+  // Update the quote when inputs change
+  useEffect(() => {
+    if (amountFrom) {
+      const { toAmount, priceImpact, rate } = getSwapQuote(tokenFrom, tokenTo, amountFrom);
+      setAmountTo(toAmount);
+      setPriceImpact(priceImpact);
+      setExchangeRate(rate);
+    } else {
+      setAmountTo('');
+      setPriceImpact(null);
+      setExchangeRate(null);
+    }
+  }, [amountFrom, tokenFrom, tokenTo]);
+  
+  // Swap the tokens
+  const handleReverseTokens = () => {
+    setTokenFrom(tokenTo);
+    setTokenTo(tokenFrom);
+    setAmountFrom(amountTo);
+    setAmountTo(amountFrom);
+  };
+  
+  // Execute the swap
+  const handleSwap = () => {
+    // In a real implementation, this would call the smart contract
+    toast({
+      title: "Swap Simulated",
+      description: `Swapped ${amountFrom} ${tokenFrom.symbol} for ${amountTo} ${tokenTo.symbol}`,
+      variant: "default",
+    });
+    
+    // Reset form
+    setAmountFrom('');
+    setAmountTo('');
+  };
+  
+  // Get button state
+  const getButtonState = () => {
+    if (!isConnected) {
+      return {
+        text: "Connect Wallet",
+        disabled: false,
+        action: () => {}, // This would trigger the wallet connect modal
+      };
+    }
+    
+    if (!amountFrom || parseFloat(amountFrom) === 0) {
+      return {
+        text: "Enter an amount",
+        disabled: true,
+        action: () => {},
+      };
+    }
+    
+    // In a real app, you would check the user's balance
+    return {
+      text: `Swap ${tokenFrom.symbol} for ${tokenTo.symbol}`,
+      disabled: false,
+      action: handleSwap,
+    };
+  };
+  
+  const buttonState = getButtonState();
+  
+  return (
+    <Card className="w-full max-w-md mx-auto bg-gradient-to-br from-dex-secondary/80 to-dex-background border border-dex-border shadow-lg rounded-xl p-5">
+      <div className="flex justify-between items-center mb-6">
+        <h2 className="text-lg font-medium">Swap</h2>
+        <Button variant="ghost" size="icon" className="text-dex-foreground/70 hover:text-dex-foreground rounded-full">
+          <Settings size={18} />
+        </Button>
+      </div>
+      
+      {/* From token */}
+      <div className="bg-dex-background/50 border border-dex-border rounded-xl p-4 mb-2">
+        <div className="flex justify-between mb-2">
+          <span className="text-sm text-dex-foreground/70">From</span>
+          <span className="text-sm text-dex-foreground/70">
+            Balance: 1.5 {tokenFrom.symbol}
+          </span>
+        </div>
+        <div className="flex items-center gap-2">
+          <Input
+            type="number"
+            placeholder="0.0"
+            value={amountFrom}
+            onChange={(e) => setAmountFrom(e.target.value)}
+            className="bg-transparent border-none text-xl py-2 px-0 focus-visible:ring-0 focus-visible:ring-offset-0"
+          />
+          <TokenSelect
+            selectedToken={tokenFrom}
+            onSelectToken={setTokenFrom}
+            excludeToken={tokenTo}
+          />
+        </div>
+      </div>
+      
+      {/* Swap direction button */}
+      <div className="relative flex justify-center my-2">
+        <Button
+          size="icon"
+          variant="ghost"
+          onClick={handleReverseTokens}
+          className="h-8 w-8 rounded-full bg-dex-secondary border border-dex-border z-10 hover:bg-dex-primary/20"
+        >
+          <ArrowDown size={14} />
+        </Button>
+        <div className="absolute top-1/2 left-0 right-0 h-px bg-dex-border -translate-y-1/2"></div>
+      </div>
+      
+      {/* To token */}
+      <div className="bg-dex-background/50 border border-dex-border rounded-xl p-4 mb-5">
+        <div className="flex justify-between mb-2">
+          <span className="text-sm text-dex-foreground/70">To</span>
+          <span className="text-sm text-dex-foreground/70">
+            Balance: 1000 {tokenTo.symbol}
+          </span>
+        </div>
+        <div className="flex items-center gap-2">
+          <Input
+            type="number"
+            placeholder="0.0"
+            value={amountTo}
+            readOnly
+            className="bg-transparent border-none text-xl py-2 px-0 focus-visible:ring-0 focus-visible:ring-offset-0"
+          />
+          <TokenSelect
+            selectedToken={tokenTo}
+            onSelectToken={setTokenTo}
+            excludeToken={tokenFrom}
+          />
+        </div>
+      </div>
+      
+      {/* Swap details */}
+      {exchangeRate && (
+        <div className="bg-dex-secondary/20 rounded-lg p-3 mb-5 space-y-2 text-sm">
+          <div className="flex justify-between">
+            <span className="text-dex-foreground/70">Rate</span>
+            <span>
+              1 {tokenFrom.symbol} = {formatAmount(exchangeRate, 0, 6)} {tokenTo.symbol}
+            </span>
+          </div>
+          
+          <div className="flex justify-between items-center">
+            <div className="flex items-center gap-1">
+              <span className="text-dex-foreground/70">Price Impact</span>
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Info size={14} className="text-dex-foreground/50" />
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p className="text-xs max-w-48">
+                      The difference between the market price and estimated price due to trade size.
+                    </p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+            </div>
+            
+            <span className={`
+              ${priceImpact && priceImpact > 3 ? 'text-dex-warning' : 
+                priceImpact && priceImpact > 1 ? 'text-yellow-400' : 'text-dex-success'}
+            `}>
+              {priceImpact ? `${priceImpact.toFixed(2)}%` : '0.00%'}
+            </span>
+          </div>
+          
+          <div className="flex justify-between">
+            <span className="text-dex-foreground/70">Slippage Tolerance</span>
+            <span>{slippage}%</span>
+          </div>
+        </div>
+      )}
+      
+      {/* Action button */}
+      <Button
+        disabled={buttonState.disabled}
+        onClick={buttonState.action}
+        className="w-full py-6 bg-dex-primary hover:bg-dex-primary/90 text-white font-medium"
+      >
+        {buttonState.text}
+      </Button>
+    </Card>
+  );
+};
+
+export default SwapForm;
