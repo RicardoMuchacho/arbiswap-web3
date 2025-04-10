@@ -7,6 +7,7 @@ import Navbar from '@/components/Navbar';
 import SwapForm from '@/components/SwapForm';
 import PoolsInfo from '@/components/PoolsInfo';
 import TransactionHistory from '@/components/TransactionHistory';
+import Footer from '@/components/Footer';
 
 const Index = () => {
   return (
@@ -39,6 +40,8 @@ const Index = () => {
             </div>
           </div>
         </div>
+        
+        <Footer />
       </div>
       
       <Web3Modal
