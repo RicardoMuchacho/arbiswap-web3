@@ -38,7 +38,7 @@ const transactions = [
 
 const TransactionHistory = () => {
   return (
-    <Card className="w-full bg-gradient-to-br from-dex-secondary/80 to-dex-background border border-dex-border shadow-lg rounded-xl">
+    <Card className="w-full glass-card rounded-xl overflow-hidden">
       <CardHeader className="pb-2">
         <CardTitle className="text-lg font-medium">Recent Transactions</CardTitle>
       </CardHeader>
@@ -54,7 +54,7 @@ const TransactionHistory = () => {
                 <div className="col-span-1 text-right"></div>
               </div>
               
-              <Separator className="bg-dex-border" />
+              <Separator className="bg-dex-border/50" />
               
               {transactions.map((tx) => (
                 <div key={tx.id}>
@@ -98,7 +98,7 @@ const TransactionHistory = () => {
                       </a>
                     </div>
                   </div>
-                  <Separator className="bg-dex-border" />
+                  <Separator className="bg-dex-border/50" />
                 </div>
               ))}
             </>

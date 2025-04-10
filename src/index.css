@@ -87,6 +87,10 @@
     @apply bg-gradient-to-br from-dex-secondary to-dex-background;
   }
   
+  .glass-card {
+    @apply backdrop-blur-xl bg-dex-background/20 border border-dex-border/50 shadow-lg;
+  }
+  
   .input-field {
     @apply bg-dex-background border border-dex-border rounded-lg px-4 py-3 w-full focus:outline-none focus:ring-2 focus:ring-dex-primary focus:border-transparent text-dex-foreground placeholder:text-gray-500;
   }
@@ -101,5 +105,9 @@
   
   .btn-outline {
     @apply border border-dex-border hover:border-dex-primary text-dex-foreground font-medium py-3 px-6 rounded-lg transition-all;
+  }
+  
+  .text-gradient {
+    @apply bg-gradient-to-r from-dex-primary to-dex-accent bg-clip-text text-transparent;
   }
 }

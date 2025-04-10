@@ -131,7 +131,7 @@ const SwapForm = () => {
   const buttonState = getButtonState();
   
   return (
-    <Card className="w-full max-w-md mx-auto bg-gradient-to-br from-dex-secondary/80 to-dex-background border border-dex-border shadow-lg rounded-xl p-5">
+    <Card className="w-full max-w-md mx-auto glass-card rounded-xl overflow-hidden p-5">
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-lg font-medium">Swap</h2>
         <Button variant="ghost" size="icon" className="text-dex-foreground/70 hover:text-dex-foreground rounded-full">
@@ -140,7 +140,7 @@ const SwapForm = () => {
       </div>
       
       {/* From token */}
-      <div className="bg-dex-background/50 border border-dex-border rounded-xl p-4 mb-2">
+      <div className="bg-dex-background/30 backdrop-blur-sm border border-dex-border/50 rounded-xl p-4 mb-2">
         <div className="flex justify-between mb-2">
           <span className="text-sm text-dex-foreground/70">From</span>
           <span className="text-sm text-dex-foreground/70">
@@ -169,15 +169,15 @@ const SwapForm = () => {
           size="icon"
           variant="ghost"
           onClick={handleReverseTokens}
-          className="h-8 w-8 rounded-full bg-dex-secondary border border-dex-border z-10 hover:bg-dex-primary/20"
+          className="h-8 w-8 rounded-full bg-dex-secondary/50 border border-dex-border/50 z-10 hover:bg-dex-primary/30"
         >
           <ArrowDown size={14} />
         </Button>
-        <div className="absolute top-1/2 left-0 right-0 h-px bg-dex-border -translate-y-1/2"></div>
+        <div className="absolute top-1/2 left-0 right-0 h-px bg-dex-border/50 -translate-y-1/2"></div>
       </div>
       
       {/* To token */}
-      <div className="bg-dex-background/50 border border-dex-border rounded-xl p-4 mb-5">
+      <div className="bg-dex-background/30 backdrop-blur-sm border border-dex-border/50 rounded-xl p-4 mb-5">
         <div className="flex justify-between mb-2">
           <span className="text-sm text-dex-foreground/70">To</span>
           <span className="text-sm text-dex-foreground/70">
@@ -202,7 +202,7 @@ const SwapForm = () => {
       
       {/* Swap details */}
       {exchangeRate && (
-        <div className="bg-dex-secondary/20 rounded-lg p-3 mb-5 space-y-2 text-sm">
+        <div className="bg-dex-secondary/20 backdrop-blur-md rounded-lg p-3 mb-5 space-y-2 text-sm border border-dex-border/30">
           <div className="flex justify-between">
             <span className="text-dex-foreground/70">Rate</span>
             <span>
@@ -246,7 +246,7 @@ const SwapForm = () => {
       <Button
         disabled={buttonState.disabled}
         onClick={buttonState.action}
-        className="w-full py-6 bg-dex-primary hover:bg-dex-primary/90 text-white font-medium"
+        className="w-full py-6 bg-gradient-to-r from-dex-primary to-dex-primary/80 hover:bg-dex-primary/90 text-white font-medium"
       >
         {buttonState.text}
       </Button>

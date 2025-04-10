@@ -11,10 +11,10 @@ const Navbar = () => {
   const { disconnect } = useDisconnect();
 
   return (
-    <nav className="w-full py-4 px-6 flex items-center justify-between border-b border-dex-border">
-      <div className="flex items-center gap-2">
-        <div className="h-8 w-8 rounded-full bg-dex-primary animate-pulse-glow"></div>
-        <span className="text-xl font-bold bg-gradient-to-r from-dex-primary to-dex-accent bg-clip-text text-transparent">
+    <nav className="w-full py-4 flex items-center justify-between border-b border-dex-border/30 backdrop-blur-md bg-dex-background/20">
+      <div className="flex items-center gap-3">
+        <div className="h-8 w-8 rounded-full bg-gradient-to-r from-dex-primary to-dex-accent animate-pulse-glow"></div>
+        <span className="text-xl font-bold text-gradient">
           SepoliSwap
         </span>
       </div>
@@ -31,7 +31,7 @@ const Navbar = () => {
         
         {isConnected ? (
           <div className="flex items-center gap-2">
-            <span className="px-3 py-1.5 bg-dex-secondary/50 rounded-lg text-sm">
+            <span className="px-3 py-1.5 bg-dex-secondary/50 backdrop-blur-md rounded-lg text-sm border border-dex-border/30">
               {shortenAddress(address || '')}
             </span>
             <Button

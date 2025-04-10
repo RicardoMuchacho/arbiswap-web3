@@ -11,12 +11,16 @@ import TransactionHistory from '@/components/TransactionHistory';
 const Index = () => {
   return (
     <WagmiConfig config={wagmiConfig}>
-      <div className="min-h-screen bg-gradient-to-br from-dex-background to-dex-secondary/30">
-        <div className="container max-w-7xl mx-auto px-4">
+      <div className="min-h-screen bg-gradient-to-br from-dex-background via-dex-secondary/10 to-dex-background/90 backdrop-blur-3xl">
+        <div className="absolute inset-0 bg-[url('/background-pattern.svg')] bg-repeat opacity-5 mix-blend-soft-light pointer-events-none" />
+        <div className="absolute top-40 left-20 w-72 h-72 bg-dex-primary/20 rounded-full filter blur-3xl opacity-20 animate-pulse-glow" />
+        <div className="absolute top-60 right-20 w-96 h-96 bg-dex-accent/20 rounded-full filter blur-3xl opacity-10 animate-pulse-glow" />
+        
+        <div className="container max-w-7xl mx-auto px-4 relative z-10">
           <Navbar />
           
           <div className="py-10 flex flex-col items-center justify-center">
-            <h1 className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-dex-primary to-dex-accent mb-2">
+            <h1 className="text-4xl font-bold text-gradient mb-2">
               SepoliSwap
             </h1>
             <p className="text-dex-foreground/70 mb-10 text-center max-w-md">

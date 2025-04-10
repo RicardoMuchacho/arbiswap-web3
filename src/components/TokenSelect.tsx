@@ -44,7 +44,7 @@ const TokenSelect: React.FC<TokenSelectProps> = ({
       <DialogTrigger asChild>
         <button 
           type="button"
-          className="flex items-center gap-2 py-2 px-3 rounded-lg bg-dex-secondary/50 hover:bg-dex-secondary/70 transition-colors text-sm font-medium"
+          className="flex items-center gap-2 py-2 px-3 rounded-lg bg-dex-secondary/40 hover:bg-dex-secondary/60 transition-colors text-sm font-medium border border-dex-border/50"
         >
           {selectedToken ? (
             <>
@@ -62,7 +62,7 @@ const TokenSelect: React.FC<TokenSelectProps> = ({
         </button>
       </DialogTrigger>
       
-      <DialogContent className="bg-dex-background border-dex-border sm:max-w-md">
+      <DialogContent className="glass-card sm:max-w-md">
         <div className="space-y-4 p-2">
           <div className="flex items-center justify-between">
             <h2 className="text-lg font-medium">Select Token</h2>
@@ -80,7 +80,7 @@ const TokenSelect: React.FC<TokenSelectProps> = ({
               placeholder="Search by name or paste address"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-10 bg-dex-secondary/30 border-dex-border"
+              className="pl-10 bg-dex-secondary/30 border-dex-border/50"
             />
           </div>
           

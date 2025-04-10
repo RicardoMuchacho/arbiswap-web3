@@ -34,7 +34,7 @@ const pools = [
 
 const PoolsInfo = () => {
   return (
-    <Card className="w-full bg-gradient-to-br from-dex-secondary/80 to-dex-background border border-dex-border shadow-lg rounded-xl">
+    <Card className="w-full glass-card rounded-xl overflow-hidden">
       <CardHeader className="pb-2">
         <CardTitle className="text-lg font-medium">Liquidity Pools</CardTitle>
       </CardHeader>
@@ -48,7 +48,7 @@ const PoolsInfo = () => {
             <div className="col-span-1 text-right"></div>
           </div>
           
-          <Separator className="bg-dex-border" />
+          <Separator className="bg-dex-border/50" />
           
           {pools.map((pool) => (
             <div key={pool.id}>
@@ -80,7 +80,7 @@ const PoolsInfo = () => {
                   </a>
                 </div>
               </div>
-              <Separator className="bg-dex-border" />
+              <Separator className="bg-dex-border/50" />
             </div>
           ))}
         </div>
