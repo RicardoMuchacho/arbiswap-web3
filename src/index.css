@@ -88,7 +88,7 @@
   }
   
   .glass-card {
-    @apply backdrop-blur-xl bg-dex-background/20 border border-dex-border/50 shadow-lg;
+    @apply backdrop-blur-xl bg-dex-secondary/20 border border-dex-border/50 shadow-lg;
   }
   
   .input-field {

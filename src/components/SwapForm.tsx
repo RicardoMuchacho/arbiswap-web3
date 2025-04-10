@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useAccount } from 'wagmi';
 import { ArrowDown, Settings, Info } from 'lucide-react';
@@ -23,13 +22,11 @@ const SwapForm = () => {
   const [priceImpact, setPriceImpact] = useState<number | null>(null);
   const [exchangeRate, setExchangeRate] = useState<number | null>(null);
   
-  // Mock function to simulate getting a quote from the DEX
   const getSwapQuote = (fromToken: Token, toToken: Token, amount: string) => {
     if (!amount || parseFloat(amount) === 0) {
       return { toAmount: '0', priceImpact: 0, rate: 0 };
     }
     
-    // In a real implementation, this would call a smart contract or API
     let rate = 0;
     
     if (fromToken.symbol === 'ETH' && toToken.symbol === 'USDC') {
@@ -53,8 +50,6 @@ const SwapForm = () => {
     const parsedAmount = parseFloat(amount);
     const toAmount = (parsedAmount * rate).toString();
     
-    // Calculate a mock price impact based on the amount
-    // In a real DEX, this would come from the actual liquidity pool calculations
     const mockPriceImpact = parsedAmount > 10 ? 
       Math.min(parsedAmount * 0.005, 5) : // 0.5% per unit, max 5%
       0.1; // Minimum price impact
@@ -66,7 +61,6 @@ const SwapForm = () => {
     };
   };
   
-  // Update the quote when inputs change
   useEffect(() => {
     if (amountFrom) {
       const { toAmount, priceImpact, rate } = getSwapQuote(tokenFrom, tokenTo, amountFrom);
@@ -80,7 +74,6 @@ const SwapForm = () => {
     }
   }, [amountFrom, tokenFrom, tokenTo]);
   
-  // Swap the tokens
   const handleReverseTokens = () => {
     setTokenFrom(tokenTo);
     setTokenTo(tokenFrom);
@@ -88,27 +81,23 @@ const SwapForm = () => {
     setAmountTo(amountFrom);
   };
   
-  // Execute the swap
   const handleSwap = () => {
-    // In a real implementation, this would call the smart contract
     toast({
       title: "Swap Simulated",
       description: `Swapped ${amountFrom} ${tokenFrom.symbol} for ${amountTo} ${tokenTo.symbol}`,
       variant: "default",
     });
     
-    // Reset form
     setAmountFrom('');
     setAmountTo('');
   };
   
-  // Get button state
   const getButtonState = () => {
     if (!isConnected) {
       return {
         text: "Connect Wallet",
         disabled: false,
-        action: () => {}, // This would trigger the wallet connect modal
+        action: () => {},
       };
     }
     
@@ -120,7 +109,6 @@ const SwapForm = () => {
       };
     }
     
-    // In a real app, you would check the user's balance
     return {
       text: `Swap ${tokenFrom.symbol} for ${tokenTo.symbol}`,
       disabled: false,
@@ -139,7 +127,6 @@ const SwapForm = () => {
         </Button>
       </div>
       
-      {/* From token */}
       <div className="bg-dex-background/30 backdrop-blur-sm border border-dex-border/50 rounded-xl p-4 mb-2">
         <div className="flex justify-between mb-2">
           <span className="text-sm text-dex-foreground/70">From</span>
@@ -163,20 +150,18 @@ const SwapForm = () => {
         </div>
       </div>
       
-      {/* Swap direction button */}
       <div className="relative flex justify-center my-2">
         <Button
           size="icon"
           variant="ghost"
           onClick={handleReverseTokens}
-          className="h-8 w-8 rounded-full bg-dex-secondary/50 border border-dex-border/50 z-10 hover:bg-dex-primary/30"
+          className="h-8 w-8 rounded-full bg-dex-primary/20 border border-dex-border/50 z-10 hover:bg-dex-primary/30"
         >
           <ArrowDown size={14} />
         </Button>
         <div className="absolute top-1/2 left-0 right-0 h-px bg-dex-border/50 -translate-y-1/2"></div>
       </div>
       
-      {/* To token */}
       <div className="bg-dex-background/30 backdrop-blur-sm border border-dex-border/50 rounded-xl p-4 mb-5">
         <div className="flex justify-between mb-2">
           <span className="text-sm text-dex-foreground/70">To</span>
@@ -200,9 +185,8 @@ const SwapForm = () => {
         </div>
       </div>
       
-      {/* Swap details */}
       {exchangeRate && (
-        <div className="bg-dex-secondary/20 backdrop-blur-md rounded-lg p-3 mb-5 space-y-2 text-sm border border-dex-border/30">
+        <div className="bg-dex-primary/10 backdrop-blur-md rounded-lg p-3 mb-5 space-y-2 text-sm border border-dex-border/30">
           <div className="flex justify-between">
             <span className="text-dex-foreground/70">Rate</span>
             <span>
@@ -242,7 +226,6 @@ const SwapForm = () => {
         </div>
       )}
       
-      {/* Action button */}
       <Button
         disabled={buttonState.disabled}
         onClick={buttonState.action}
