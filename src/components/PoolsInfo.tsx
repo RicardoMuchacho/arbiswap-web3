@@ -34,13 +34,13 @@ const pools = [
 
 const PoolsInfo = () => {
   return (
-    <Card className="w-full glass-card rounded-xl overflow-hidden">
+    <Card className="w-full glass-card rounded-xl overflow-hidden bg-slate-950 text-white">
       <CardHeader className="pb-2">
         <CardTitle className="text-lg font-medium">Liquidity Pools</CardTitle>
       </CardHeader>
       <CardContent>
         <div className="space-y-3">
-          <div className="grid grid-cols-5 text-sm text-dex-foreground/70 pb-1">
+          <div className="grid grid-cols-5 text-sm text-white/70 pb-1">
             <div className="col-span-1">Pool</div>
             <div className="col-span-1 text-right">TVL</div>
             <div className="col-span-1 text-right">24h Volume</div>

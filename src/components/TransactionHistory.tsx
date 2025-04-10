@@ -38,7 +38,7 @@ const transactions = [
 
 const TransactionHistory = () => {
   return (
-    <Card className="w-full glass-card rounded-xl overflow-hidden">
+    <Card className="w-full glass-card rounded-xl overflow-hidden bg-slate-950 text-white">
       <CardHeader className="pb-2">
         <CardTitle className="text-lg font-medium">Recent Transactions</CardTitle>
       </CardHeader>
@@ -46,7 +46,7 @@ const TransactionHistory = () => {
         <div className="space-y-3">
           {transactions.length > 0 ? (
             <>
-              <div className="grid grid-cols-12 text-sm text-dex-foreground/70 pb-1">
+              <div className="grid grid-cols-12 text-sm text-white/70 pb-1">
                 <div className="col-span-1">Type</div>
                 <div className="col-span-2">Time</div>
                 <div className="col-span-5">Details</div>
@@ -67,7 +67,7 @@ const TransactionHistory = () => {
                       )}
                     </div>
                     
-                    <div className="col-span-2 text-dex-foreground/70">
+                    <div className="col-span-2 text-white/70">
                       {tx.timestamp}
                     </div>
                     
@@ -83,7 +83,7 @@ const TransactionHistory = () => {
                       )}
                     </div>
                     
-                    <div className="col-span-3 text-dex-foreground/70">
+                    <div className="col-span-3 text-white/70">
                       {shortenAddress(tx.account)}
                     </div>
                     
@@ -103,7 +103,7 @@ const TransactionHistory = () => {
               ))}
             </>
           ) : (
-            <div className="text-center py-8 text-dex-foreground/70">
+            <div className="text-center py-8 text-white/70">
               No transactions yet
             </div>
           )}
