@@ -10,6 +10,7 @@ import {
     RainbowKitProvider,
 } from '@rainbow-me/rainbowkit';
 import { WagmiProvider } from 'wagmi';
+import { sepolia } from "viem/chains";
 import { wagmiConfig } from './config/wagmiConfig.ts';
 
 const queryClient = new QueryClient();
@@ -17,7 +18,7 @@ const queryClient = new QueryClient();
 const App = () => (
     <WagmiProvider config={wagmiConfig}>
         <QueryClientProvider client={queryClient}>
-            <RainbowKitProvider>
+            <RainbowKitProvider initialChain={sepolia}>
                 <TooltipProvider>
                     <Toaster />
                     <Sonner />
