@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { useAccount, useDisconnect } from 'wagmi';
 import { shortenAddress } from '@/utils/formatters';
@@ -44,7 +43,87 @@ const Navbar = () => {
                         </Button>
                     </div>
                 ) : (
-                    <ConnectButton />
+                    <ConnectButton.Custom>
+                        {({
+                            account,
+                            chain,
+                            openAccountModal,
+                            openChainModal,
+                            openConnectModal,
+                            mounted,
+                        }) => {
+                            const ready = mounted;
+                            const connected = ready && account && chain;
+
+                            return (
+                                <div
+                                    {...(!ready && {
+                                        'aria-hidden': true,
+                                        style: {
+                                            opacity: 0,
+                                            pointerEvents: 'none',
+                                            userSelect: 'none',
+                                        },
+                                    })}
+                                >
+                                    {(() => {
+                                        if (!connected) {
+                                            return (
+                                                <Button
+                                                    onClick={openConnectModal}
+                                                    className="bg-dex-primary hover:bg-dex-primary/90 text-white"
+                                                >
+                                                    Connect Wallet
+                                                </Button>
+                                            );
+                                        }
+
+                                        if (chain.unsupported) {
+                                            return (
+                                                <Button
+                                                    onClick={openChainModal}
+                                                    className="bg-dex-error hover:bg-dex-error/90 text-white"
+                                                >
+                                                    Wrong network
+                                                </Button>
+                                            );
+                                        }
+
+                                        return (
+                                            <div className="flex items-center gap-2">
+                                                <Button
+                                                    onClick={openChainModal}
+                                                    className="bg-dex-secondary/50 hover:bg-dex-secondary/70 text-dex-foreground"
+                                                >
+                                                    {chain.hasIcon && (
+                                                        <div className="w-6 h-6 mr-2">
+                                                            {chain.iconUrl && (
+                                                                <img
+                                                                    alt={chain.name ?? 'Chain icon'}
+                                                                    src={chain.iconUrl}
+                                                                    className="w-full h-full"
+                                                                />
+                                                            )}
+                                                        </div>
+                                                    )}
+                                                    {chain.name}
+                                                </Button>
+                                                <Button
+                                                    onClick={openAccountModal}
+                                                    className="bg-dex-secondary/50 hover:bg-dex-secondary/70 text-dex-foreground"
+                                                >
+                                                    {account.displayName}
+                                                    {account.displayBalance
+                                                        ? ` (${account.displayBalance})`
+                                                        : ''}
+                                                </Button>
+                                            </div>
+                                        );
+                                    })()}
+                                </div>
+                            );
+                        }}
+                    </ConnectButton.Custom>
                 )}
             </div>
         </nav>

@@ -10,7 +10,7 @@ import {
     RainbowKitProvider,
 } from '@rainbow-me/rainbowkit';
 import { WagmiProvider } from 'wagmi';
-import { wagmiConfig } from '../wagmiConfig';
+import { wagmiConfig } from './config/wagmiConfig.ts';
 
 const queryClient = new QueryClient();
 
