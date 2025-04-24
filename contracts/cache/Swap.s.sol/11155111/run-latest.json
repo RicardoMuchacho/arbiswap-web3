@@ -1,0 +1,7 @@
+{
+  "transactions": [
+    {
+      "rpc": "wss://ethereum-sepolia-rpc.publicnode.com"
+    }
+  ]
+}
