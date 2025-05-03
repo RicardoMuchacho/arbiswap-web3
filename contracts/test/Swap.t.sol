@@ -13,29 +13,21 @@ contract SwapTest is Test {
     address devUser = 0xc717879FBc3EA9F770c0927374ed74A998A3E2Ce;
     address arbUser = 0x41acf0e6eC627bDb3747b9Ed6799c2B469F77C5F;
 
-    address constant sepoliaRouter2 = 0xeE567Fe1712Faf6149d80dA1E6934E354124CfE3;
-    address constant USDT = 0xaA8E23Fb1079EA71e0a56F48a2aA51851D8433D0;
-    address constant WETH = 0x7b79995e5f793A07Bc00c21412e50Ecae098E7f9;
-    address constant DAI = 0x68194a729C2450ad26072b3D33ADaCbcef39D574;
+    address constant arbRouter2 = 0x4752ba5DBc23f44D87826276BF6Fd6b1C372aD24;
+    address constant USDT = 0xFd086bC7CD5C481DCC9C85ebE478A1C0b69FCbb9;
+    address constant WETH = 0x82aF49447D8a07e3bd95BD0d56f35241523fBab1;
+    address constant DAI = 0xDA10009cBd5D07dd0CeCc66161FC93D7c9000da1;
 
-    string constant SEPOLIA_RPC = "wss://sepolia.drpc.org";
-    uint256 public constant FORK_BLOCK = 8186586;
+    string constant ARBITRUM_RPC = "https://arb1.arbitrum.io/rpc";
+    uint256 public constant FORK_BLOCK = 321250277;
 
     function setUp() public {
-        vm.createSelectFork(SEPOLIA_RPC, FORK_BLOCK);
-        app = new SwapApp(sepoliaRouter2);
+        vm.createSelectFork(ARBITRUM_RPC, FORK_BLOCK);
+        app = new SwapApp(arbRouter2);
     }
 
-    // function test_getUserBalance() public {
-    //     vm.startPrank(devUser);
-      
-    //     console.log(devUser.balance);
-
-    //     vm.stopPrank();
-    // }
-
     function test_isDeployedCorrectly() public view {
-        assert(app.V2Router02Address() == sepoliaRouter2);
+        assert(app.V2Router02Address() == arbRouter2);
     }
 
     function test_revertETHSwapIfNoETH() public {
