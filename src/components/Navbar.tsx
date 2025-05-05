@@ -14,18 +14,18 @@ const Navbar = () => {
             <div className="flex items-center gap-3">
                 <div className="h-8 w-8 rounded-full bg-gradient-to-r from-dex-primary to-dex-accent animate-pulse-glow"></div>
                 <span className="text-xl font-bold text-gradient">
-                    SepoliSwap
+                    ArbiSwap
                 </span>
             </div>
 
             <div className="flex items-center gap-4">
                 <a
-                    href="https://sepolia.etherscan.io"
+                    href="https://arbiscan.io/"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-dex-foreground/80 hover:text-dex-foreground flex items-center gap-1 text-sm"
                 >
-                    Sepolia Testnet <ExternalLink size={14} />
+                    Arbitrum Mainnet <ExternalLink size={14} />
                 </a>
 
                 {isConnected ? (

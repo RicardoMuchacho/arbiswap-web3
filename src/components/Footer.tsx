@@ -14,7 +14,7 @@ const Footer = () => {
                 <div className="flex flex-col md:flex-row justify-between items-center gap-4">
                     <div className="flex items-center text-dex-foreground/70">
                         <Copyright size={16} className="mr-2" />
-                        <span>2025 SepoliSwap. All rights reserved.</span>
+                        <span>2025 ArbiSwap. All rights reserved.</span>
                     </div>
 
                     <div className="flex items-center gap-1">

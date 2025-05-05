@@ -18,10 +18,10 @@ const Index = () => {
 
                 <div className="py-10 flex flex-col items-center justify-center">
                     <h1 className="text-4xl font-bold text-gradient mb-2">
-                        SepoliSwap
+                        ArbiSwap
                     </h1>
                     <p className="text-dex-foreground/70 mb-10 text-center max-w-md">
-                        A decentralized exchange for swapping tokens on the Ethereum Sepolia testnet
+                        A decentralized exchange for swapping tokens on Arbitrum blockchain
                     </p>
 
                     <div className="grid grid-cols-1 lg:grid-cols-6 gap-4 w-full mb-10">
