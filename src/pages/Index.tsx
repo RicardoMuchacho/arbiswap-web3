@@ -24,13 +24,13 @@ const Index = () => {
                         A decentralized exchange for swapping tokens on the Ethereum Sepolia testnet
                     </p>
 
-                    <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 w-full mb-10">
-                        <div className="lg:col-span-2">
+                    <div className="grid grid-cols-1 lg:grid-cols-6 gap-4 w-full mb-10">
+                        <div className="lg:col-span-3">
                             <SwapForm />
                         </div>
 
                         <div className="lg:col-span-3 space-y-6">
-                            <PoolsInfo />
+                            {/* <PoolsInfo /> */}
                             <TransactionHistory />
                         </div>
                     </div>

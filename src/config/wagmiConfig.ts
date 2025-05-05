@@ -1,15 +1,11 @@
 // src/wagmiConfig.ts
 import '@rainbow-me/rainbowkit/styles.css';
 import {
-  getDefaultWallets
+  getDefaultWallets,
+  RainbowKitProvider,
 } from '@rainbow-me/rainbowkit';
-import { sepolia } from 'wagmi/chains';
+import { arbitrum } from 'wagmi/chains';
 import { createConfig, http } from '@wagmi/core'
-
-// const { chains, publicClient } = configureChains(
-//   [sepolia],
-//   [publicProvider()] // You can add Alchemy or Infura here if you want
-// );
 
 const { connectors } = getDefaultWallets({
   appName: 'SepoliSwap',
@@ -17,9 +13,13 @@ const { connectors } = getDefaultWallets({
 });
 
 export const wagmiConfig = createConfig({
-    chains: [sepolia],
+    chains: [arbitrum],
     transports: {
-        [sepolia.id]: http('https://sepolia.example.com'),
-      },
+        [arbitrum.id]: http('https://arb1.arbitrum.io/rpc'),
+    },
     connectors: connectors,
+    ssr: false, // Disable SSR to prevent storage access issues
+    batch: {
+        multicall: true,
+    },
 })
