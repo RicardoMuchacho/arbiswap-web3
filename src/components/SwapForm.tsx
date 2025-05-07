@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useAccount } from 'wagmi';
+import { useAccount, useBalance } from 'wagmi';
 import { ArrowDown, Settings, Info } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
@@ -10,14 +10,14 @@ import { TOKENS, Token } from '@/constants/tokens';
 import { formatAmount } from '@/utils/formatters';
 import { useToast } from '@/components/ui/use-toast';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
+
 const SwapForm = () => {
-    const {
-        address,
-        isConnected
-    } = useAccount();
-    const {
-        toast
-    } = useToast();
+    const { address, isConnected } = useAccount();
+    const balances = useBalance({ address })
+    const { toast } = useToast();
+
+    console.log("balances", balances);
+
     const [tokenFrom, setTokenFrom] = useState<Token>(TOKENS.ETH);
     const [tokenTo, setTokenTo] = useState<Token>(TOKENS.USDC);
     const [amountFrom, setAmountFrom] = useState('');
