@@ -7,24 +7,25 @@ import { Input } from '@/components/ui/input';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import TokenSelect from './TokenSelect';
 import { TOKENS, Token } from '@/constants/tokens';
-import { formatAmount } from '@/utils/formatters';
+// import { formatAmount } from '@/utils/formatters';
 import { useToast } from '@/components/ui/use-toast';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
+import { useConfig } from 'wagmi';
+import { useTokenBalances } from '@/hooks/use-balances';
 
 const SwapForm = () => {
     const { address, isConnected } = useAccount();
-    const balances = useBalance({ address })
+    const { balances, loading } = useTokenBalances();
     const { toast } = useToast();
 
-    console.log("balances", balances);
-
     const [tokenFrom, setTokenFrom] = useState<Token>(TOKENS.ETH);
-    const [tokenTo, setTokenTo] = useState<Token>(TOKENS.USDC);
+    const [tokenTo, setTokenTo] = useState<Token>(TOKENS.USDT);
     const [amountFrom, setAmountFrom] = useState('');
     const [amountTo, setAmountTo] = useState('');
     const [slippage, setSlippage] = useState(0.5); // 0.5% default slippage
     const [priceImpact, setPriceImpact] = useState<number | null>(null);
     const [exchangeRate, setExchangeRate] = useState<number | null>(null);
+
     const getSwapQuote = (fromToken: Token, toToken: Token, amount: string) => {
         if (!amount || parseFloat(amount) === 0) {
             return {
@@ -134,7 +135,7 @@ const SwapForm = () => {
             <div className="flex justify-between mb-2">
                 <span className="text-sm text-dex-foreground/70">From</span>
                 <span className="text-sm text-dex-foreground/70">
-                    Balance: 1.5 {tokenFrom.symbol}
+                    Balance: {balances[tokenFrom.symbol]} {tokenFrom.symbol}
                 </span>
             </div>
             <div className="flex items-center gap-2">
@@ -154,7 +155,7 @@ const SwapForm = () => {
             <div className="flex justify-between mb-2">
                 <span className="text-sm text-dex-foreground/70">To</span>
                 <span className="text-sm text-dex-foreground/70">
-                    Balance: 1000 {tokenTo.symbol}
+                    Balance: {balances[tokenTo.symbol]} {tokenTo.symbol}
                 </span>
             </div>
             <div className="flex items-center gap-2">
@@ -167,7 +168,8 @@ const SwapForm = () => {
             <div className="flex justify-between">
                 <span className="text-dex-foreground/70">Rate</span>
                 <span>
-                    1 {tokenFrom.symbol} = {formatAmount(exchangeRate, 0, 6)} {tokenTo.symbol}
+                    1 {tokenFrom.symbol} = { } {tokenTo.symbol}
+                    {/* 1 {tokenFrom.symbol} = {formatAmount(exchangeRate, 0, 6)} {tokenTo.symbol} */}
                 </span>
             </div>
 

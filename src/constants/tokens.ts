@@ -23,13 +23,6 @@ export const TOKENS: Record<string, Token> = {
     address: "0xaf88d065e77c8cC2239327C5EDb3A432268e5831",
     logoURI: "https://assets.coingecko.com/coins/images/6319/small/USD_Coin_icon.png",
   },
-//   DAI: {
-//     symbol: "DAI",
-//     name: "Dai Stablecoin",
-//     decimals: 18,
-//     address: "0xDA10009cBd5D07dd0CeCc66161FC93D7c9000da1",
-//     logoURI: "https://assets.coingecko.com/coins/images/9956/small/4943.png",
-//   },
   WETH: {
     symbol: "WETH",
     name: "Wrapped Ethereum",
