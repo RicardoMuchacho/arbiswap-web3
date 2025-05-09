@@ -1,6 +1,7 @@
 // useTransactionHistory.ts
 import { useEffect, useState } from "react";
 import { Alchemy, Network, AssetTransfersWithMetadataResult } from "alchemy-sdk";
+import { useAccount } from "wagmi";
 
 export interface FormattedTransaction {
     hash: string;
@@ -27,13 +28,17 @@ const formatTransaction = (tx: AssetTransfersWithMetadataResult): FormattedTrans
     };
 };
 
-export const useTransactionHistory = (address: `0x${string}` | undefined) => {
+export const useTransactionHistory = () => {
+    const { address } = useAccount();
     const [transactions, setTransactions] = useState<FormattedTransaction[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
 
+    console.log("current", address)
+    console.log("current", !address)
+
     useEffect(() => {
-        if (!address) return;
+        if (!address) return setTransactions([]);
         fetchTransactions();
     }, [address]);
 
@@ -54,7 +59,7 @@ export const useTransactionHistory = (address: `0x${string}` | undefined) => {
                 toAddress: address,
                 category: ["external", "erc20"],
                 withMetadata: true,
-                maxCount: 25,
+                maxCount: 5,
                 order: "desc",
             });
             console.log(response)

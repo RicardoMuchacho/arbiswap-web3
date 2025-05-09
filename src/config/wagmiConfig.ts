@@ -2,7 +2,6 @@
 import '@rainbow-me/rainbowkit/styles.css';
 import {
   getDefaultWallets,
-  RainbowKitProvider,
 } from '@rainbow-me/rainbowkit';
 import { arbitrum } from 'wagmi/chains';
 import { createConfig, http } from '@wagmi/core'

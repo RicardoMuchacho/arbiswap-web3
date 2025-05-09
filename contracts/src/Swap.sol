@@ -67,20 +67,20 @@ contract SwapApp {
         emit tokensForETHSwap(msg.sender, path_[0], amountIn_, amountsOut[amountsOut.length - 1]);
     }
 
-    function _swapTokens(uint256 amountIn_, uint256 amountOutMin_, address[] memory path_, uint256 deadline_)
-        internal
-        returns (uint256 tokenOut_)
-    {
-        IERC20(path_[0]).safeTransferFrom(msg.sender, address(this), amountIn_);
-        IERC20(path_[0]).approve(V2Router02Address, amountIn_);
-        uint256[] memory amountsOut = IV2Router(V2Router02Address).swapExactTokensForTokens(
-            amountIn_, amountOutMin_, path_, address(this), deadline_
-        );
+    // function _swapTokens(uint256 amountIn_, uint256 amountOutMin_, address[] memory path_, uint256 deadline_)
+    //     internal
+    //     returns (uint256 tokenOut_)
+    // {
+    //     IERC20(path_[0]).safeTransferFrom(msg.sender, address(this), amountIn_);
+    //     IERC20(path_[0]).approve(V2Router02Address, amountIn_);
+    //     uint256[] memory amountsOut = IV2Router(V2Router02Address).swapExactTokensForTokens(
+    //         amountIn_, amountOutMin_, path_, address(this), deadline_
+    //     );
 
-        tokenOut_ = amountsOut[amountsOut.length - 1];
+    //     tokenOut_ = amountsOut[amountsOut.length - 1];
 
-        emit tokenSwap(msg.sender, path_[0], path_[path_.length - 1], amountIn_, tokenOut_);
-    }
+    //     emit tokenSwap(msg.sender, path_[0], path_[path_.length - 1], amountIn_, tokenOut_);
+    // }
 
     // Liquidity
     // function addLiquidityWithTokenA(

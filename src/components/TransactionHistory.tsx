@@ -11,13 +11,10 @@ import {
     ArrowRightLeft,
     Plus,
 } from "lucide-react";
-import { shortenAddress } from "@/utils/formatters";
 import { useTransactionHistory } from "@/hooks/use-transactions";
-import { useAccount } from "wagmi";
 
 const TransactionHistory = () => {
-    const { address } = useAccount();
-    const { transactions, loading } = useTransactionHistory(address);
+    const { transactions, loading } = useTransactionHistory();
 
     return (
         <Card className="w-full glass-card rounded-xl overflow-hidden bg-slate-950 text-white">
