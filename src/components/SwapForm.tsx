@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { useAccount, useBalance, useReadContract, useWriteContract, useTransaction } from 'wagmi';
 import { ArrowDown, Settings, Info } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -31,6 +31,9 @@ const SwapForm = () => {
     const [priceImpact, setPriceImpact] = useState<number | null>(null);
     const [exchangeRate, setExchangeRate] = useState<number | null>(null);
     const [isApproved, setIsApproved] = useState(false);
+
+    // Add a debounce timer ref
+    const debounceTimerRef = useRef<NodeJS.Timeout | null>(null);
 
     // Memoize the contract config to prevent unnecessary re-renders
     const contractConfig = useMemo(() => {
@@ -73,21 +76,33 @@ const SwapForm = () => {
     };
 
     useEffect(() => {
-        if (amountFrom) {
-            // Create an async function inside the effect and call it immediately
-            const updateQuote = async () => {
-                const toAmount = await getSwapQuote(tokenFrom, tokenTo, amountFrom);
-                setAmountTo(toAmount);
-                // setPriceImpact(priceImpact);
-                // setExchangeRate(rate);
-            };
+        if (debounceTimerRef.current) {
+            clearTimeout(debounceTimerRef.current);
+        }
 
-            updateQuote();
+        if (amountFrom) {
+            // Create a new timer to update the quote after 500ms
+            debounceTimerRef.current = setTimeout(async () => {
+                const updateQuote = async () => {
+                    const toAmount = await getSwapQuote(tokenFrom, tokenTo, amountFrom);
+                    setAmountTo(toAmount);
+                    // setPriceImpact(priceImpact);
+                    // setExchangeRate(rate);
+                };
+
+                updateQuote();
+            }, 500);
         } else {
             setAmountTo('');
             setPriceImpact(null);
             setExchangeRate(null);
         }
+
+        return () => {
+            if (debounceTimerRef.current) {
+                clearTimeout(debounceTimerRef.current);
+            }
+        };
     }, [amountFrom, tokenFrom, tokenTo]);
 
     // Update approval status when allowance changes
