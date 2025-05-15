@@ -1,15 +1,13 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
-import { useAccount, useBalance, useReadContract, useWriteContract, useTransaction } from 'wagmi';
-import { ArrowDown, Settings, Info } from 'lucide-react';
+import { useAccount, useReadContract, useWriteContract } from 'wagmi';
+import { ArrowDown, Settings } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import TokenSelect from './TokenSelect';
-import { TOKENS, TOKEN_LIST, Token } from '@/constants/tokens';
+import { TOKENS, Token } from '@/constants/tokens';
 import { useToast } from '@/components/ui/use-toast';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
-import { useConfig } from 'wagmi';
 import { useTokenBalances } from '@/hooks/use-balances';
 import { getAmountOut, swapETHForTokens, swapTokens, swapTokensForETH } from '@/api/contractInteractions';
 import { wagmiConfig } from '@/config/wagmiConfig';
@@ -24,15 +22,12 @@ const SwapForm = () => {
     const { refetchTransactions } = useTransactionHistory();
     const { toast } = useToast();
     const { writeContractAsync } = useWriteContract();
-    const { data: transaction } = useTransaction();
 
     const [tokenFrom, setTokenFrom] = useState<Token>(TOKENS.ETH);
     const [tokenTo, setTokenTo] = useState<Token>(TOKENS.USDT);
     const [amountFrom, setAmountFrom] = useState('');
     const [amountTo, setAmountTo] = useState('');
     const [slippage, setSlippage] = useState(0.5); // 0.5% default slippage
-    const [priceImpact, setPriceImpact] = useState<number | null>(null);
-    const [exchangeRate, setExchangeRate] = useState<number | null>(null);
     const [isApproved, setIsApproved] = useState(false);
 
     // Add a debounce timer ref
@@ -92,16 +87,12 @@ const SwapForm = () => {
                 const updateQuote = async () => {
                     const toAmount = await getSwapQuote(tokenFrom, tokenTo, amountFrom);
                     setAmountTo(toAmount);
-                    // setPriceImpact(priceImpact);
-                    // setExchangeRate(rate);
                 };
 
                 updateQuote();
             }, 500);
         } else {
             setAmountTo('');
-            setPriceImpact(null);
-            setExchangeRate(null);
         }
 
         return () => {
