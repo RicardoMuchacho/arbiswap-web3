@@ -11,14 +11,17 @@ import { useToast } from '@/components/ui/use-toast';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 import { useConfig } from 'wagmi';
 import { useTokenBalances } from '@/hooks/use-balances';
-import { getAmountOut } from '@/api/contractInteractions';
+import { getAmountOut, swapETHForTokens, swapTokens, swapTokensForETH } from '@/api/contractInteractions';
 import { wagmiConfig } from '@/config/wagmiConfig';
 import { swapContract } from '@/constants/contractAddresses';
 import { erc20Abi, parseUnits, formatUnits } from 'viem';
+import { useTransactionHistory } from "@/hooks/use-transactions";
+import { waitForTransactionReceipt } from '@wagmi/core';
 
 const SwapForm = () => {
     const { address, isConnected, chain } = useAccount();
-    const { balances, loading } = useTokenBalances();
+    const { balances, loading, refetchBalances } = useTokenBalances();
+    const { refetchTransactions } = useTransactionHistory();
     const { toast } = useToast();
     const { writeContractAsync } = useWriteContract();
     const { data: transaction } = useTransaction();
@@ -67,6 +70,9 @@ const SwapForm = () => {
         if (tokenFrom.symbol == "ETH") {
             expectedOutput = await getAmountOut(bigIntAmount, [TOKENS.WETH.address, tokenTo.address]);
             readableAmount = formatUnits(expectedOutput, TOKENS[tokenTo.symbol].decimals);
+        } else if (tokenTo.symbol == "ETH") {
+            expectedOutput = await getAmountOut(bigIntAmount, [tokenFrom.address, TOKENS.WETH.address]);
+            readableAmount = formatUnits(expectedOutput, TOKENS.WETH.decimals);
         } else {
             expectedOutput = await getAmountOut(bigIntAmount, [tokenFrom.address, tokenTo.address]);
             readableAmount = formatUnits(expectedOutput, TOKENS[tokenTo.symbol].decimals);
@@ -123,18 +129,78 @@ const SwapForm = () => {
     };
 
     const handleSwap = async () => {
-        if (tokenFrom.symbol == "ETH") {
-            const bigIntAmount = parseUnits('1', 18); // 1 ETH = 10^18 wei
-            const test = await getAmountOut(bigIntAmount, [TOKENS.WETH.address, tokenTo.address]);
-            console.log('amountOutETH', test);
-        } else {
-            const bigIntAmount = parseUnits(amountFrom || '0', TOKENS[tokenFrom.symbol].decimals);
-            const test = await getAmountOut(bigIntAmount, [tokenFrom.address, tokenTo.address]);
-            console.log('amountOut', test);
-        }
+        if (!address) return;
 
-        setAmountFrom('');
-        setAmountTo('');
+        try {
+            const bigIntAmountIn = parseUnits(amountFrom, TOKENS[tokenFrom.symbol].decimals)
+            const minAmountOut = parseUnits(amountTo, TOKENS[tokenTo.symbol].decimals)
+            let slippageAmount = minAmountOut * BigInt(Math.floor((100 - slippage) * 100)) / BigInt(10000)
+            let txHash;
+
+            if (tokenFrom.symbol === "ETH") {
+                txHash = await swapETHForTokens(
+                    bigIntAmountIn,
+                    slippageAmount,
+                    [TOKENS.WETH.address, tokenTo.address],
+                    address
+                );
+
+                toast({
+                    title: "Swap Submitted",
+                    description: `Swapping ${amountFrom} ${tokenFrom.symbol} for ${tokenTo.symbol}`,
+                    variant: "default"
+                });
+            } else if (tokenTo.symbol === "ETH") {
+                txHash = await swapTokensForETH(
+                    bigIntAmountIn,
+                    slippageAmount,
+                    [tokenFrom.address, TOKENS.WETH.address],
+                    address
+                );
+
+                toast({
+                    title: "Swap Submitted",
+                    description: `Swapping ${amountFrom} ${tokenFrom.symbol} for ETH`,
+                    variant: "default"
+                });
+            } else {
+                txHash = await swapTokens(
+                    bigIntAmountIn,
+                    slippageAmount,
+                    [tokenFrom.address, tokenTo.address],
+                    address
+                );
+
+                toast({
+                    title: "Swap Submitted",
+                    description: `Swapping ${amountFrom} ${tokenFrom.symbol} for ${tokenTo.symbol}`,
+                    variant: "default"
+                });
+            }
+
+            const receipt = await waitForTransactionReceipt(wagmiConfig, { hash: txHash });
+            if (receipt?.status === 'success') {
+                toast({
+                    title: "Swap Completed",
+                    description: `Transaction hash: ${txHash.slice(0, 10)}...`,
+                    variant: "success"
+                });
+                setAmountFrom('');
+                setAmountTo('');
+                refetchBalances();
+                refetchTransactions();
+            } else {
+                throw new Error("Transaction failed or was reverted");
+            }
+
+        } catch (error) {
+            console.error("Swap failed:", error);
+            toast({
+                title: "Swap Failed",
+                description: "There was an error executing the swap",
+                variant: "destructive"
+            });
+        }
     };
 
     const handleApprove = async () => {
@@ -145,19 +211,24 @@ const SwapForm = () => {
                 address: tokenFrom.address as `0x${string}`,
                 abi: erc20Abi,
                 functionName: 'approve',
-                args: [swapContract, BigInt(1e250)],
+                args: [swapContract, 2n ** 250n],
                 chain,
                 account: address
             });
 
-            if (transaction?.status === 'success') {
+            const receipt = await waitForTransactionReceipt(wagmiConfig, { hash });
+
+            if (receipt?.status === 'success') {
                 setIsApproved(true);
                 toast({
                     title: "Approval Successful",
                     description: `${tokenFrom.symbol} has been approved for swapping`,
-                    variant: "default"
+                    variant: "success"
                 });
+            } else {
+                throw new Error("Transaction failed or was reverted");
             }
+
         } catch (error) {
             console.error('Approval failed:', error);
             toast({

@@ -19,43 +19,41 @@ export function useTokenBalances() {
   const [balances, setBalances] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState(false);
 
+  const fetchBalances = async () => {
+    setLoading(true);
+    const results: Record<string, string> = {};
+
+    await Promise.all(
+      Object.values(TOKENS).map(async (token) => {
+        try {
+          if (token.symbol === 'ETH') {
+            const eth = await getBalance(config, { address });
+            results[token.symbol] = formatBalance(eth.value, token.decimals);
+          } else {
+            const raw = await readContract(config, {
+              address: token.address as `0x${string}`,
+              abi: erc20Abi,
+              functionName: 'balanceOf',
+              args: [address],
+            });
+            results[token.symbol] = formatBalance(raw as bigint, token.decimals);
+          }
+        } catch (e) {
+          console.warn(`Failed to fetch ${token.symbol} balance`, e);
+          results[token.symbol] = '0';
+        }
+      })
+    ); 
+    setBalances(results);
+    setLoading(false);
+  };
+
   useEffect(() => {
     if (!address) return;
-
-    const fetchBalances = async () => {
-      setLoading(true);
-      const results: Record<string, string> = {};
-
-      await Promise.all(
-        Object.values(TOKENS).map(async (token) => {
-          try {
-            if (token.symbol === 'ETH') {
-              const eth = await getBalance(config, { address });
-              results[token.symbol] = formatBalance(eth.value, token.decimals);
-            } else {
-              const raw = await readContract(config, {
-                address: token.address as `0x${string}`,
-                abi: erc20Abi,
-                functionName: 'balanceOf',
-                args: [address],
-              });
-              results[token.symbol] = formatBalance(raw as bigint, token.decimals);
-            }
-          } catch (e) {
-            console.warn(`Failed to fetch ${token.symbol} balance`, e);
-            results[token.symbol] = '0';
-          }
-        })
-      ); 
-      console.log("results balance hook:", results)
-      setBalances(results);
-      setLoading(false);
-    };
-
     fetchBalances();
   }, [address, config]);
 
-  return { balances, loading };
+  return { balances, loading, refetchBalances: fetchBalances };
 }
 
 function formatBalance(value: bigint, decimals: number): string {

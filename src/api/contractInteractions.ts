@@ -1,11 +1,9 @@
-import { useReadContract, useWriteContract } from 'wagmi'
 import { swapAbi } from '../constants/abi.ts'
 import { swapContract } from '@/constants/contractAddresses.ts'
 import { type Address } from 'viem'
-import { arbitrum } from 'viem/chains'
-import { readContract } from 'viem/actions'
 import { wagmiConfig } from '@/config/wagmiConfig.ts'
-import { getPublicClient } from '@wagmi/core'
+import { getPublicClient, readContract, writeContract } from '@wagmi/core'
+import { arbitrum } from 'wagmi/chains'
 
 export async function getAmountOut(amountIn: bigint, path: string[]): Promise<bigint> {
     const client = getPublicClient(wagmiConfig)
@@ -20,87 +18,72 @@ export async function getAmountOut(amountIn: bigint, path: string[]): Promise<bi
     return BigInt(result.toString());
 }
 
-export const useSwapETHForTokens = (
-    amountOutMin: bigint,
-    path: string[],
-    deadline: bigint,
+export async function swapETHForTokens(
     value: bigint,
+    amountOutMin: bigint,
+    path: string[],
     account: Address
-) => {
-    const { writeContractAsync } = useWriteContract()
+): Promise<`0x${string}` | undefined> {
+    try {
+        const result = await writeContract(wagmiConfig, {
+            abi: swapAbi,
+            address: swapContract,
+            functionName: 'swapETHForTokens',
+            args: [amountOutMin, path, BigInt(Math.floor(Date.now() / 1000) + 60)],
+            account,
+            value,
+            chain: arbitrum
+        });
 
-    return async () => {
-        try {
-            const result = await writeContractAsync({
-                abi: swapAbi,
-                address: swapContract,
-                functionName: 'swapETHForTokens',
-                args: [amountOutMin, path, deadline],
-                value,
-                account,
-                chain: arbitrum,
-                chainId: arbitrum.id
-            })
-            return result
-        } catch (error) {
-            console.error('Error in swapETHForTokens:', error)
-            throw error
-        }
+        return result;
+    } catch (error) {
+        console.error('Error in swapETHForTokens:', error)
+        throw error
     }
 }
 
-export const useSwapTokensForETH = (
+export async function swapTokensForETH(
     amountIn: bigint,
     amountOutMin: bigint,
     path: string[],
-    deadline: bigint,
     account: Address
-) => {
-    const { writeContractAsync } = useWriteContract()
+): Promise<`0x${string}` | undefined> {
+    try {
+        const result = await writeContract(wagmiConfig, {
+            abi: swapAbi,
+            address: swapContract,
+            functionName: 'swapTokensForETH',
+            args: [amountIn, amountOutMin, path, BigInt(Math.floor(Date.now() / 1000) + 60)],
+            account,
+            chain: arbitrum
+        });
 
-    return async () => {
-        try {
-            const result = await writeContractAsync({
-                abi: swapAbi,
-                address: swapContract,
-                functionName: 'swapTokensForETH',
-                args: [amountIn, amountOutMin, path, deadline],
-                account,
-                chain: arbitrum,
-                chainId: arbitrum.id
-            })
-            return result
-        } catch (error) {
-            console.error('Error in swapTokensForETH:', error)
-            throw error
-        }
+        return result;
+    } catch (error) {
+        console.error('Error in swapTokensForETH:', error)
+        throw error
     }
 }
 
-export const useSwapTokens = (
+export async function swapTokens(
     amountIn: bigint,
     amountOutMin: bigint,
     path: string[],
-    deadline: bigint,
     account: Address
-) => {
-    const { writeContractAsync } = useWriteContract()
+): Promise<`0x${string}` | undefined> {
+    try {
+        const result = await writeContract(wagmiConfig, {
+            abi: swapAbi,
+            address: swapContract,
+            functionName: 'swapTokens',
+            args: [amountIn, amountOutMin, path, BigInt(Math.floor(Date.now() / 1000) + 60)],
+            account,
+            chain: arbitrum
+        });
 
-    return async () => {
-        try {
-            const result = await writeContractAsync({
-                abi: swapAbi,
-                address: swapContract,
-                functionName: 'swapTokens',
-                args: [amountIn, amountOutMin, path, deadline],
-                account,
-                chain: arbitrum,
-                chainId: arbitrum.id
-            })
-            return result
-        } catch (error) {
-            console.error('Error in swapTokens:', error)
-            throw error
-        }
+        return result;
+    } catch (error) {
+        console.error('Error in swapTokens:', error)
+        throw error
     }
 }
