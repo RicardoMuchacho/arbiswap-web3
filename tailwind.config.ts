@@ -1,4 +1,3 @@
-
 import type { Config } from "tailwindcss";
 
 export default {
@@ -54,9 +53,9 @@ export default {
 					foreground: 'hsl(var(--card-foreground))'
 				},
 				dex: {
-					primary: '#8247E5',
-					secondary: '#2D0B5A',
-					accent: '#D4B3FF',
+					primary: '#1E40AF',
+					secondary: '#0F2167',
+					accent: '#93C5FD',
 					background: '#13111C',
 					foreground: '#F7F7F7',
 					border: '#3F3951',
