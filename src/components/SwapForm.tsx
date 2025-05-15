@@ -14,7 +14,7 @@ import { useTokenBalances } from '@/hooks/use-balances';
 import { getAmountOut } from '@/api/contractInteractions';
 import { wagmiConfig } from '@/config/wagmiConfig';
 import { swapContract } from '@/constants/contractAddresses';
-import { erc20Abi } from 'viem';
+import { erc20Abi, parseUnits, formatUnits } from 'viem';
 
 const SwapForm = () => {
     const { address, isConnected, chain } = useAccount();
@@ -55,45 +55,34 @@ const SwapForm = () => {
 
     const getSwapQuote = async (fromToken: Token, toToken: Token, amount: string) => {
         if (!amount || parseFloat(amount) === 0) {
-            return {
-                toAmount: '0',
-                priceImpact: 0,
-                rate: 0
-            };
+            return '0'
         }
-        let expectedOutput = 0;
-        if (tokenFrom.symbol == "ETH") {
-            const test = await getAmountOut(1e18, [TOKENS.WETH.address, tokenTo.address]);
-            console.log('amountOuteTH', test);
-        } else {
-            const test = await getAmountOut(parseInt(amountFrom) ** 10 * tokenFrom.decimals, [tokenFrom.address, tokenTo.address]);
-            console.log('amountOut', test);
-            console.log(parseInt(amountFrom) ** 10 * tokenFrom.decimals)
-        }
-        const rate = 0;
-        const parsedAmount = parseFloat(amount);
-        const toAmount = (parsedAmount * rate).toString();
-        const mockPriceImpact = parsedAmount > 10 ? Math.min(parsedAmount * 0.005, 5) :
-            // 0.5% per unit, max 5%
-            0.1; // Minimum price impact
+        let expectedOutput: bigint = 0n;
+        let readableAmount = '0';
+        const bigIntAmount = parseUnits(amountFrom, TOKENS[tokenFrom.symbol].decimals)
 
-        return {
-            toAmount,
-            priceImpact: mockPriceImpact,
-            rate
-        };
+        if (tokenFrom.symbol == "ETH") {
+            expectedOutput = await getAmountOut(bigIntAmount, [TOKENS.WETH.address, tokenTo.address]);
+            readableAmount = formatUnits(expectedOutput, TOKENS[tokenTo.symbol].decimals);
+        } else {
+            expectedOutput = await getAmountOut(bigIntAmount, [tokenFrom.address, tokenTo.address]);
+            readableAmount = formatUnits(expectedOutput, TOKENS[tokenTo.symbol].decimals);
+        }
+
+        return readableAmount;
     };
 
     useEffect(() => {
         if (amountFrom) {
-            // const {
-            //     toAmount,
-            //     priceImpact,
-            //     rate
-            // } = getSwapQuote(tokenFrom, tokenTo, amountFrom);
-            // setAmountTo(toAmount);
-            // setPriceImpact(priceImpact);
-            // setExchangeRate(rate);
+            // Create an async function inside the effect and call it immediately
+            const updateQuote = async () => {
+                const toAmount = await getSwapQuote(tokenFrom, tokenTo, amountFrom);
+                setAmountTo(toAmount);
+                // setPriceImpact(priceImpact);
+                // setExchangeRate(rate);
+            };
+
+            updateQuote();
         } else {
             setAmountTo('');
             setPriceImpact(null);
@@ -120,20 +109,15 @@ const SwapForm = () => {
 
     const handleSwap = async () => {
         if (tokenFrom.symbol == "ETH") {
-            const test = await getAmountOut(1e18, [TOKENS.WETH.address, tokenTo.address]);
-            console.log('amountOuteTH', test);
+            const bigIntAmount = parseUnits('1', 18); // 1 ETH = 10^18 wei
+            const test = await getAmountOut(bigIntAmount, [TOKENS.WETH.address, tokenTo.address]);
+            console.log('amountOutETH', test);
         } else {
-            const test = await getAmountOut(parseInt(amountFrom) ** 10 * tokenFrom.decimals, [tokenFrom.address, tokenTo.address]);
+            const bigIntAmount = parseUnits(amountFrom || '0', TOKENS[tokenFrom.symbol].decimals);
+            const test = await getAmountOut(bigIntAmount, [tokenFrom.address, tokenTo.address]);
             console.log('amountOut', test);
-            console.log(parseInt(amountFrom) ** 10 * tokenFrom.decimals)
         }
 
-
-        // toast({
-        //     title: "Swap Simulated",
-        //     description: `Swapped ${amountFrom} ${tokenFrom.symbol} for ${amountTo} ${tokenTo.symbol}`,
-        //     variant: "default"
-        // });
         setAmountFrom('');
         setAmountTo('');
     };

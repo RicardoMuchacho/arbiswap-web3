@@ -7,16 +7,18 @@ import { readContract } from 'viem/actions'
 import { wagmiConfig } from '@/config/wagmiConfig.ts'
 import { getPublicClient } from '@wagmi/core'
 
-export async function getAmountOut(amountIn: number, path: string[]) {
+export async function getAmountOut(amountIn: bigint, path: string[]): Promise<bigint> {
     const client = getPublicClient(wagmiConfig)
 
-    return await client.readContract({
+    const result = await client.readContract({
       abi: swapAbi,
       address: swapContract,
       functionName: 'getAmountOutHelper',
       args: [amountIn, path],
     });
-  }
+    
+    return BigInt(result.toString());
+}
 
 export const useSwapETHForTokens = (
     amountOutMin: bigint,
