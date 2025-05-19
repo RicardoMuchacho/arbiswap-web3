@@ -11,11 +11,14 @@ import {
     ArrowRightLeft,
     Plus,
 } from "lucide-react";
-import { useTransactionHistory } from "@/hooks/use-transactions";
+import { FormattedTransaction } from "@/hooks/use-transactions";
 
-const TransactionHistory = () => {
-    const { transactions, loading } = useTransactionHistory();
+interface props {
+    loading: boolean;
+    transactions: FormattedTransaction[];
+}
 
+const TransactionHistory = ({ loading, transactions }: props) => {
     return (
         <Card className="w-full glass-card rounded-xl overflow-hidden bg-slate-950 text-white">
             <CardHeader className="pb-2">

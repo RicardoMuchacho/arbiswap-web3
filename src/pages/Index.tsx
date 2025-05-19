@@ -8,7 +8,7 @@ import Footer from '@/components/Footer';
 import { useTransactionHistory } from '@/hooks/use-transactions';
 
 const Index = () => {
-    const { refetchTransactions } = useTransactionHistory();
+    const { transactions, loading, refetchTransactions } = useTransactionHistory();
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-dex-background via-dex-secondary/10 to-dex-background/90 backdrop-blur-3xl">
@@ -34,7 +34,7 @@ const Index = () => {
 
                         <div className="lg:col-span-3 space-y-6">
                             {/* <PoolsInfo /> */}
-                            <TransactionHistory />
+                            <TransactionHistory transactions={transactions} loading={loading} />
                         </div>
                     </div>
                 </div>

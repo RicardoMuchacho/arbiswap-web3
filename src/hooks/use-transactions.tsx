@@ -34,8 +34,7 @@ export const useTransactionHistory = () => {
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
 
-    console.log("current", address)
-    console.log("current", !address)
+    console.log("transactions", transactions)
 
     useEffect(() => {
         if (!address) return setTransactions([]);
