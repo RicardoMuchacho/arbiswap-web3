@@ -8,7 +8,7 @@ ArbiSwap is a decentralized exchange (DEX) application built on the Arbitrum net
 
 ## 🔗 Links
 
-- **Live Demo**: [ArbiSwap DEX](https://arbiswap-850awjw48-ricardomuchachos-projects.vercel.app/)
+- **Live Demo**: [ArbiSwap DEX](https://arbiswap-lovat.vercel.app/)
 - **Smart Contract**: [Arbiscan](https://arbiscan.io/address/0xe2fb9ded633c5c5e4756faf0cb1964ced8647c39)
 - **GitHub Repository**: [Source Code](https://github.com/RicardoMuchacho/arbiswap-web3)
 
