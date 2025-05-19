@@ -52,8 +52,6 @@ ArbiSwap is a decentralized exchange (DEX) application built on the Arbitrum net
 - Optimized Transactions
   - Single-click approve + swap
   - Gas optimization
-- Mobile Responsive Design
-- Advanced Analytics Dashboard
 
 ## 🛠️ Technologies
 
