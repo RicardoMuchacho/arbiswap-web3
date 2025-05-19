@@ -59,7 +59,7 @@ export const useTransactionHistory = () => {
                 toAddress: address,
                 category: ["external", "erc20"],
                 withMetadata: true,
-                maxCount: 5,
+                maxCount: 4,
                 order: "desc",
             });
             console.log(response)

@@ -5,8 +5,11 @@ import SwapForm from '@/components/SwapForm';
 import PoolsInfo from '@/components/PoolsInfo';
 import TransactionHistory from '@/components/TransactionHistory';
 import Footer from '@/components/Footer';
+import { useTransactionHistory } from '@/hooks/use-transactions';
 
 const Index = () => {
+    const { refetchTransactions } = useTransactionHistory();
+
     return (
         <div className="min-h-screen bg-gradient-to-br from-dex-background via-dex-secondary/10 to-dex-background/90 backdrop-blur-3xl">
             <div className="absolute inset-0 bg-[url('/background-pattern.svg')] bg-repeat opacity-5 mix-blend-soft-light pointer-events-none" />
@@ -26,7 +29,7 @@ const Index = () => {
 
                     <div className="grid grid-cols-1 lg:grid-cols-6 gap-4 w-full mb-10">
                         <div className="lg:col-span-3">
-                            <SwapForm />
+                            <SwapForm onSwapSuccess={refetchTransactions} />
                         </div>
 
                         <div className="lg:col-span-3 space-y-6">

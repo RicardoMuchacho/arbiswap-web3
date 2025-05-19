@@ -13,13 +13,11 @@ import { getAmountOut, swapETHForTokens, swapTokens, swapTokensForETH } from '@/
 import { wagmiConfig } from '@/config/wagmiConfig';
 import { swapContract } from '@/constants/contractAddresses';
 import { erc20Abi, parseUnits, formatUnits } from 'viem';
-import { useTransactionHistory } from "@/hooks/use-transactions";
 import { waitForTransactionReceipt } from '@wagmi/core';
 
-const SwapForm = () => {
+const SwapForm = ({ onSwapSuccess }: { onSwapSuccess: () => void }) => {
     const { address, isConnected, chain } = useAccount();
     const { balances, loading, refetchBalances } = useTokenBalances();
-    const { refetchTransactions } = useTransactionHistory();
     const { toast } = useToast();
     const { writeContractAsync } = useWriteContract();
 
@@ -27,7 +25,7 @@ const SwapForm = () => {
     const [tokenTo, setTokenTo] = useState<Token>(TOKENS.USDT);
     const [amountFrom, setAmountFrom] = useState('');
     const [amountTo, setAmountTo] = useState('');
-    const [slippage, setSlippage] = useState(0.5); // 0.5% default slippage
+    const [slippage, setSlippage] = useState(5); // 5% default slippage
     const [isApproved, setIsApproved] = useState(false);
 
     // Add a debounce timer ref
@@ -72,8 +70,9 @@ const SwapForm = () => {
             expectedOutput = await getAmountOut(bigIntAmount, [tokenFrom.address, tokenTo.address]);
             readableAmount = formatUnits(expectedOutput, TOKENS[tokenTo.symbol].decimals);
         }
+        let truncatedReadableAmount = (Math.floor(Number(readableAmount) * 1e8) / 1e8).toString()
 
-        return readableAmount;
+        return truncatedReadableAmount;
     };
 
     useEffect(() => {
@@ -126,6 +125,7 @@ const SwapForm = () => {
             const bigIntAmountIn = parseUnits(amountFrom, TOKENS[tokenFrom.symbol].decimals)
             const minAmountOut = parseUnits(amountTo, TOKENS[tokenTo.symbol].decimals)
             let slippageAmount = minAmountOut * BigInt(Math.floor((100 - slippage) * 100)) / BigInt(10000)
+            console.log("minAmount:", minAmountOut, "slippaageAmount", slippageAmount)
             let txHash;
 
             if (tokenFrom.symbol === "ETH") {
@@ -179,7 +179,7 @@ const SwapForm = () => {
                 setAmountFrom('');
                 setAmountTo('');
                 refetchBalances();
-                refetchTransactions();
+                onSwapSuccess();
             } else {
                 throw new Error("Transaction failed or was reverted");
             }

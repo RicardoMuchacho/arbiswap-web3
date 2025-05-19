@@ -53,7 +53,7 @@ export async function swapTokensForETH(
             abi: swapAbi,
             address: swapContract,
             functionName: 'swapTokensForETH',
-            args: [amountIn, amountOutMin, path, BigInt(Math.floor(Date.now() / 1000) + 60)],
+            args: [amountIn, amountOutMin, path, BigInt(Math.floor(Date.now() / 1000) + 600)],
             account,
             chain: arbitrum
         });
