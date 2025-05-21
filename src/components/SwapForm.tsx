@@ -111,6 +111,34 @@ const SwapForm = ({ onSwapSuccess }: { onSwapSuccess: () => void }) => {
         }
     }, [allowance, tokenFrom.address]);
 
+    useEffect(() => {
+        getWalletCaps();
+    }, [address]);
+
+    const getWalletCaps = async () => {
+        if (!address) return;
+
+        try {
+            const client = await getWalletClient(wagmiConfig);
+            if (!client) {
+                console.error('Wallet client not available');
+                return;
+            }
+
+            // console.log(arbitrum)
+            // console.log(`0x${arbitrum.id.toString(16)}`)
+
+            const res = await client.request({
+                method: 'wallet_getCapabilities',
+                params: [address]
+            });
+
+            console.log('Wallet Capabilities:', res);
+        } catch (error) {
+            console.error('Error getting wallet capabilities:', error);
+        }
+    }
+
     const handleReverseTokens = () => {
         setTokenFrom(tokenTo);
         setTokenTo(tokenFrom);
