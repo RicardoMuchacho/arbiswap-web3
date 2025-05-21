@@ -13,7 +13,8 @@ import { getAmountOut, swapETHForTokens, swapTokens, swapTokensForETH } from '@/
 import { wagmiConfig } from '@/config/wagmiConfig';
 import { swapContract } from '@/constants/contractAddresses';
 import { erc20Abi, parseUnits, formatUnits } from 'viem';
-import { waitForTransactionReceipt } from '@wagmi/core';
+import { getWalletClient, waitForTransactionReceipt } from '@wagmi/core';
+import { arbitrum } from 'viem/chains';
 
 const SwapForm = ({ onSwapSuccess }: { onSwapSuccess: () => void }) => {
     const { address, isConnected, chain } = useAccount();
@@ -103,7 +104,6 @@ const SwapForm = ({ onSwapSuccess }: { onSwapSuccess: () => void }) => {
 
     // Update approval status when allowance changes
     useEffect(() => {
-        console.log('allowance', allowance)
         if (tokenFrom.address === TOKENS.ETH.address) {
             setIsApproved(true);
         } else if (allowance !== undefined) {

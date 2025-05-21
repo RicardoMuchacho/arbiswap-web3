@@ -34,8 +34,6 @@ export const useTransactionHistory = () => {
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
 
-    console.log("transactions", transactions)
-
     useEffect(() => {
         if (!address) return setTransactions([]);
         fetchTransactions();
@@ -61,7 +59,6 @@ export const useTransactionHistory = () => {
                 maxCount: 4,
                 order: "desc",
             });
-            console.log(response)
             const formatted = response.transfers.map(formatTransaction);
             setTransactions(formatted);
         } catch (err) {
