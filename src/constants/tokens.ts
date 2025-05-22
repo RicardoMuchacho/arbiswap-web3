@@ -37,6 +37,13 @@ export const TOKENS: Record<string, Token> = {
     address: "0xFd086bC7CD5C481DCC9C85ebE478A1C0b69FCbb9",
     logoURI: "https://assets.coingecko.com/coins/images/325/small/Tether.png",
   },
+  ARB: {
+    symbol: "ARB",
+    name: "Arbitrum",
+    decimals: 18,
+    address: "0x912CE59144191C1204E64559FE8253a0e49E6548",
+    logoURI: "https://assets.coingecko.com/coins/images/16547/small/photo_2023-03-29_21.47.00.jpeg",
+  },
 };
 
 export const TOKEN_LIST = Object.values(TOKENS);
